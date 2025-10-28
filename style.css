@@ -1981,4 +1981,52 @@ body::before {
 
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.3);
+/* ============================================
+   FLOATING ANIMATIONS - ADD THIS AT THE END
+   ============================================ */
+
+/* Floating animation for cards */
+.setup-card,
+.assignment-card {
+  animation: cardFloat 6s ease-in-out infinite;
+}
+
+@keyframes cardFloat {
+  0%, 100% { 
+    transform: translateY(0px); 
+  }
+  50% { 
+    transform: translateY(-8px); 
+  }
+}
+
+/* Floating animation for header */
+.header-content {
+  animation: headerFloat 8s ease-in-out infinite;
+}
+
+@keyframes headerFloat {
+  0%, 100% { 
+    transform: translateY(0px); 
+  }
+  50% { 
+    transform: translateY(-6px); 
+  }
+}
+
+/* Subtle continuous movement for the title */
+.header-title {
+  animation: titleFloat 10s ease-in-out infinite;
+}
+
+@keyframes titleFloat {
+  0%, 100% { 
+    transform: translateY(0px); 
+  }
+  25% { 
+    transform: translateY(-3px); 
+  }
+  75% { 
+    transform: translateY(3px); 
+  }
 }
