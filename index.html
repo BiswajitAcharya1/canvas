@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Study Planner</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Main App Container -->
+    <div id="app">
+        <!-- Setup Screen -->
+        <div id="setupScreen" class="screen active">
+            <div class="setup-container">
+                <div class="setup-card glass-card">
+                    <div class="icon-container">
+                        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="64" height="64" rx="16" fill="url(#gradient1)"/>
+                            <path d="M32 16L24 24H28V36H36V24H40L32 16Z" fill="white"/>
+                            <rect x="20" y="40" width="24" height="4" rx="2" fill="white" opacity="0.8"/>
+                            <defs>
+                                <linearGradient id="gradient1" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#007AFF"/>
+                                    <stop offset="1" stop-color="#5856D6"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <h1 style="font-size: 34px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.025em;">Canvas Study Planner</h1>
+                    <p style="font-size: 16px; opacity: 0.9; margin-bottom: 32px;">Organize your assignments and create personalized study plans</p>
+                    
+                    <!-- Help Section -->
+                    <div class="help-section glass-card" style="margin-bottom: var(--space-lg); text-align: left;">
+                        <button type="button" class="help-toggle" id="helpToggle">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/>
+                                <path d="M10 14V14.01M10 6V10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            <span>Getting Started</span>
+                            <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <div class="help-content hidden" id="helpContent">
+                            <div class="help-item">
+                                <h4 class="headline" style="margin-bottom: var(--space-sm); color: var(--ios-blue); font-weight: 600;">Canvas URL</h4>
+                                <p class="footnote" style="margin-bottom: var(--space-sm);">Enter your school's Canvas URL. Examples:</p>
+                                <ul class="footnote" style="list-style: none; padding-left: var(--space-md);">
+                                    <li style="margin-bottom: var(--space-xs);">canvas.harvard.edu</li>
+                                    <li style="margin-bottom: var(--space-xs);">lammersville.instructure.com</li>
+                                    <li>yourschool.instructure.com</li>
+                                </ul>
+                            </div>
+                            <div class="help-item" style="margin-top: var(--space-md);">
+                                <h4 class="headline" style="margin-bottom: var(--space-sm); color: var(--ios-purple); font-weight: 600;">Canvas API Token</h4>
+                                <p class="footnote" style="margin-bottom: var(--space-sm);">To generate your access token:</p>
+                                <ol class="footnote" style="padding-left: var(--space-lg);">
+                                    <li style="margin-bottom: var(--space-xs);">Sign in to Canvas</li>
+                                    <li style="margin-bottom: var(--space-xs);">Go to Account → Settings</li>
+                                    <li style="margin-bottom: var(--space-xs);">Scroll to Approved Integrations</li>
+                                    <li style="margin-bottom: var(--space-xs);">Select New Access Token</li>
+                                    <li>Copy the token and paste it here</li>
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                    
+                    <form id="setupForm" class="setup-form">
+                        <div class="form-group">
+                            <label for="canvasUrl" class="form-label">Canvas URL</label>
+                            <input 
+                                type="url" 
+                                id="canvasUrl" 
+                                class="glass-input" 
+                                placeholder="https://your-school.instructure.com"
+                                required
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="canvasToken" class="form-label">Access Token</label>
+                            <input 
+                                type="password" 
+                                id="canvasToken" 
+                                class="glass-input" 
+                                placeholder="Enter your access token"
+                                required
+                            >
+                        </div>
+                        
+
+                        <button type="submit" class="btn-primary" id="connectBtn">
+                            <span class="btn-text">Connect</span>
+                            <div class="spinner hidden"></div>
+                        </button>
+                        
+                        <div id="setupStatus" class="status-message hidden"></div>
+                        <div id="setupError" class="error-message hidden"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Assignments Screen -->
+        <div id="assignmentsScreen" class="screen">
+            <div class="assignments-container">
+                <div class="header-section">
+                    <div class="header-content glass-card">
+                        <h1 class="title-1">My Assignments</h1>
+                        <button class="btn-secondary" id="disconnectBtn">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M13 3L17 7L13 11M17 7H7M11 17H5C3.89543 17 3 16.1046 3 15V9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Disconnect
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="assignments-grid" id="assignmentsGrid">
+                    <!-- Assignment cards will be inserted here -->
+                </div>
+                
+                <div id="loadingAssignments" class="loading-state glass-card hidden">
+                    <div class="spinner"></div>
+                    <p class="body">Loading assignments...</p>
+                </div>
+                
+                <div id="emptyState" class="empty-state glass-card hidden">
+                    <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="40" cy="40" r="40" fill="rgba(0, 122, 255, 0.1)"/>
+                        <path d="M40 20V44M40 52V56M28 32L40 44L52 32" stroke="#007AFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <h3 class="title-2" style="font-weight: 600;">No Assignments Found</h3>
+                    <p class="body text-secondary">You don't have any upcoming assignments</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Study Plan Modal -->
+        <div id="studyPlanModal" class="modal hidden">
+            <div class="modal-backdrop" id="modalBackdrop"></div>
+            <div class="modal-content glass-card">
+                <div class="modal-header">
+                    <h2 class="title-2" id="modalTitle">Study Plan</h2>
+                    <button class="btn-close" id="closeModal">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="modal-body" id="modalBody">
+                    <div class="generating-state" id="generatingState">
+                        <div class="spinner"></div>
+                        <p class="body">Generating personalized study plan</p>
+                    </div>
+                    
+                    <div id="studyPlanContent" class="hidden">
+                        <!-- Study plan content will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
