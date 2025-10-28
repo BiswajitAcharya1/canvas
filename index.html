@@ -13,18 +13,6 @@
         <div id="setupScreen" class="screen active">
             <div class="setup-container">
                 <div class="setup-card glass-card">
-                    <div class="icon-container">
-                        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="64" height="64" rx="16" fill="url(#gradient1)"/>
-                            <path d="M32 16L24 24H28V36H36V24H40L32 16Z" fill="white"/>
-                            <rect x="20" y="40" width="24" height="4" rx="2" fill="white" opacity="0.8"/>
-                            <defs>
-                                <linearGradient id="gradient1" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-                                    <stop stop-color="#007AFF"/>
-                                    <stop offset="1" stop-color="#5856D6"/>
-                                </linearGradient>
-                            </defs>
-                        </svg>
                     </div>
                     <h1 style="font-size: 34px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.025em;">Canvas Study Planner</h1>
                     <p style="font-size: 16px; opacity: 0.9; margin-bottom: 32px;">Organize your assignments and create personalized study plans</p>
@@ -65,18 +53,26 @@
 
                         </div>
                     </div>
-                    
-                    <form id="setupForm" class="setup-form">
-                        <div class="form-group">
-                            <label for="canvasUrl" class="form-label">Canvas URL</label>
-                            <input 
-                                type="url" 
-                                id="canvasUrl" 
-                                class="glass-input" 
-                                placeholder="https://your-school.instructure.com"
-                                required
-                            >
-                        </div>
+                <div class="form-group">
+    <label for="districtName" class="form-label">District Name</label>
+    <input
+        type="text"
+        id="districtName"
+        class="glass-input"
+        placeholder="lammersville"
+        required
+    >
+    <p class="help-text">Enter your district name (e.g., lammersville, myschool)</p>
+    <div style="margin-top: 8px;">
+        <input
+            id="canvasUrl"
+            class="glass-input"
+            placeholder="https://lammersville.instructure.com"
+            disabled
+            style="opacity: 0.7;"
+        >
+    </div>
+</div>
                         
                         <div class="form-group">
                             <label for="canvasToken" class="form-label">Access Token</label>
