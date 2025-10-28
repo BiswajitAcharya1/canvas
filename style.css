@@ -1022,12 +1022,17 @@ body::before {
 }
 
 .setup-form {
-    margin-top: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin-top: var(--space-xl); /* keep your existing margin! */
 }
 
 .form-group {
-    margin-bottom: 28px;
-    text-align: left;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 28px; /* keep your existing margin! */
+  text-align: left;
 }
 
 .form-label {
