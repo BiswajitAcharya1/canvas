@@ -33,6 +33,22 @@ const setupError = document.getElementById('setupError');
 const setupStatus = document.getElementById('setupStatus');
 const helpToggle = document.getElementById('helpToggle');
 const helpContent = document.getElementById('helpContent');
+// ============================================
+// DISTRICT NAME AUTO-GENERATION
+// ============================================
+const districtInput = document.getElementById('districtName');
+const canvasUrlInput = document.getElementById('canvasUrl');
+
+if (districtInput && canvasUrlInput) {
+  districtInput.addEventListener('input', function() {
+    const value = districtInput.value.trim();
+    // Remove all non-alphanumeric characters and convert to lowercase
+    const subdomain = value.toLowerCase().replace(/[^a-z0-9]/g, "");
+    // Generate Canvas URL
+    canvasUrlInput.value = subdomain ? `https://${subdomain}.instructure.com` : "";
+  });
+}
+
 
 // Help toggle handler
 if (helpToggle) {
@@ -2185,5 +2201,14 @@ function showScreen(screenName) {
         // CRITICAL: Render assignments when showing assignments screen
         console.log('About to render', appState.assignments.length, 'assignments');
         renderAssignments(appState.assignments);
+    // ============================================
+// ESC KEY TO CLOSE MODAL
+// ============================================
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape' || event.key === 'Esc') {
+    const modal = document.getElementById('studyPlanModal');
+    if (modal && !modal.classList.contains('hidden')) {
+      hideModal();
     }
-}
+  }
+});
