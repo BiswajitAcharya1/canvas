@@ -1,0 +1,1744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mosaic - Financial Health</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #000000;
+      color: #E8E8E8;
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-weight: 300;
+    }
+
+    /* Homepage */
+    .page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .auth-card {
+      text-align: center;
+      max-width: 440px;
+      width: 100%;
+    }
+
+    .logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 24px;
+      background: #10B981;
+      border-radius: 12px;
+      clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+      position: relative;
+    }
+
+    .logo::after {
+      content: '';
+      position: absolute;
+      width: 70%;
+      height: 70%;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 6px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      clip-path: polygon(25% 10%, 75% 10%, 90% 50%, 75% 90%, 25% 90%, 10% 50%);
+    }
+
+    h1 {
+      font-size: 48px;
+      font-weight: 600;
+      color: #FFFFFF;
+      margin-bottom: 8px;
+    }
+
+    .tagline {
+      font-size: 15px;
+      color: #D0D0D0;
+      margin-bottom: 40px;
+      font-weight: 400;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 16px 24px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      margin-bottom: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: #10B981;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #0ea572;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: #2a2a3e;
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-secondary:hover {
+      background: #363650;
+    }
+
+    .demo-box {
+      margin-top: 32px;
+      padding: 16px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 8px;
+    }
+
+    .demo-box p {
+      color: white;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .demo-credentials {
+      color: #10B981;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* Form Page */
+    .form-container {
+      max-width: 500px;
+      width: 100%;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      color: #9CA3AF;
+      cursor: pointer;
+      padding: 8px;
+      margin-bottom: 24px;
+      font-size: 14px;
+    }
+
+    .back-btn:hover {
+      color: white;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      font-size: 15px;
+      margin-bottom: 16px;
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      font-family: inherit;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #10B981;
+    }
+
+    .error {
+      background: rgba(255, 107, 107, 0.1);
+      color: #FF6B6B;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .error.show {
+      display: block;
+    }
+
+    .link-text {
+      font-size: 14px;
+      color: #9CA3AF;
+      margin-top: 24px;
+    }
+
+    .link-btn {
+      background: none;
+      border: none;
+      color: #10B981;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    /* Dashboard */
+    .dashboard {
+      min-height: 100vh;
+    }
+
+    .nav {
+      background: rgba(0, 0, 0, 0.95);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-logo-small {
+      width: 28px;
+      height: 28px;
+      background: #10B981;
+      clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+    }
+
+    .nav-tab {
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      color: #D0D0D0;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 400;
+      transition: all 0.3s ease;
+    }
+
+    .nav-tab:hover {
+      color: #FFFFFF;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .nav-tab.active {
+      color: #FFFFFF;
+      background: rgba(16, 185, 129, 0.25);
+      border-color: rgba(16, 185, 129, 0.5);
+    }
+
+    .content {
+      padding: 32px 48px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-header h2 {
+      font-size: 48px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #FFFFFF;
+    }
+
+    .section-header p {
+      color: #D0D0D0;
+      font-size: 15px;
+      margin-bottom: 40px;
+      font-weight: 400;
+    }
+
+    /* Mosaic Tree */
+    .mosaic-container {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .coin {
+      position: relative;
+      width: 400px;
+      height: 400px;
+      margin: 0 auto 40px;
+      border-radius: 50%;
+    }
+
+    @media (max-width: 768px) {
+      .coin {
+        width: 300px;
+        height: 300px;
+      }
+    }
+
+    .fragment {
+      position: absolute;
+      transition: all 0.4s ease;
+      cursor: pointer;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      background: linear-gradient(135deg, var(--fragment-color) 0%, var(--fragment-color-light) 100%);
+      box-shadow: 0 0 20px rgba(var(--fragment-rgb), 0.6), inset 0 0 20px rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(5px);
+    }
+
+    .fragment:hover {
+      transform: scale(1.08);
+      border-color: rgba(255, 255, 255, 0.9);
+      z-index: 10;
+      box-shadow: 0 0 30px rgba(var(--fragment-rgb), 0.9), inset 0 0 30px rgba(255, 255, 255, 0.3);
+    }
+
+    .score {
+      margin-top: 32px;
+    }
+
+    .score h2 {
+      font-size: 80px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #FFDE59, #00D4FF, #10B981);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+
+    .score-label {
+      font-size: 16px;
+      color: #E8E8E8;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .score p {
+      font-size: 14px;
+      color: #D0D0D0;
+      font-weight: 400;
+    }
+
+    /* Stats */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin: 32px 0;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 24px;
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #A8A8A8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+      font-weight: 400;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 600;
+      color: #FFFFFF;
+    }
+
+    /* Categories */
+    .categories {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+
+    .category-card {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .category-card:hover {
+      transform: translateY(-4px);
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .category-name {
+      font-size: 12px;
+      color: #A8A8A8;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      font-weight: 400;
+    }
+
+    .category-amount {
+      font-size: 28px;
+      font-weight: 600;
+      color: #FFFFFF;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .stats, .categories {
+        grid-template-columns: 1fr;
+      }
+      
+      .nav-tabs {
+        flex-wrap: wrap;
+      }
+      
+      .tree {
+        width: 100%;
+        height: 400px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script>
+    console.log('Mosaic app starting...');
+    
+    // Simple in-memory state (NO localStorage)
+    const state = {
+      page: 'home',
+      user: null,
+      users: [
+        { email: 'demo@mosaic.com', password: 'demo123', name: 'Demo User', bank: 'Wells Fargo' }
+      ],
+      data: {
+        balance: 5432.10,
+        income: 4500,
+        spending: 2200,
+        score: 74,
+        savingsRate: 51.1,
+        carbonFootprint: 285,
+        carbonTrend: -8,
+        carbonBreakdown: {
+          'Food Delivery': 45,
+          'Transport': 35,
+          'Shopping': 20
+        },
+        lastSynced: new Date().toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })
+      },
+      bankData: {
+        'Wells Fargo': { balance: 8765.50, income: 6200, spending: 3100, score: 82, carbon: 320 },
+        'Chase': { balance: 5432.10, income: 4500, spending: 2200, score: 74, carbon: 285 },
+        'Bank of America': { balance: 3120.75, income: 3800, spending: 2950, score: 61, carbon: 410 },
+        'Citibank': { balance: 4250.00, income: 5000, spending: 2800, score: 68, carbon: 295 },
+        'Chime': { balance: 1850.00, income: 2800, spending: 1600, score: 65, carbon: 180 },
+        'Stride Bank': { balance: 6543.20, income: 5500, spending: 2900, score: 78, carbon: 265 }
+      }
+    };
+
+    // Navigation
+    function navigate(page) {
+      console.log('Navigate to:', page);
+      state.page = page;
+      render();
+    }
+
+    // Render pages
+    function render() {
+      const app = document.getElementById('app');
+      if (!app) {
+        console.error('App element not found!');
+        return;
+      }
+
+      console.log('Rendering page:', state.page);
+
+      if (state.page === 'home') {
+        app.innerHTML = `
+          <div class="page">
+            <div class="auth-card">
+              <div class="logo"></div>
+              <h1>Mosaic</h1>
+              <p class="tagline">Your financial health, beautifully clear</p>
+              <button class="btn btn-primary" onclick="navigate('signin')">Sign In</button>
+              <button class="btn btn-secondary" onclick="navigate('signup')">Create Account</button>
+              <div class="demo-box">
+                <p>Try Demo Account:</p>
+                <p class="demo-credentials">demo@mosaic.com / demo123</p>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      else if (state.page === 'signup') {
+        app.innerHTML = `
+          <div class="page">
+            <div class="form-container">
+              <button class="back-btn" onclick="navigate('home')">← Back</button>
+              <div class="logo" style="margin: 0 auto 24px;"></div>
+              <h1>Create Account</h1>
+              <p class="tagline">Join Mosaic today</p>
+              <div class="error" id="error"></div>
+              <form onsubmit="handleSignup(event)">
+                <input type="email" class="form-input" id="email" placeholder="Email" required>
+                <input type="password" class="form-input" id="password" placeholder="Password" required>
+                <input type="password" class="form-input" id="confirm" placeholder="Confirm Password" required>
+                <button type="submit" class="btn btn-primary">Create Account</button>
+              </form>
+              <p class="link-text">Already have an account? <button class="link-btn" onclick="navigate('signin')">Sign in</button></p>
+            </div>
+          </div>
+        `;
+      }
+      else if (state.page === 'insights') {
+        app.innerHTML = `
+          <div class="dashboard">
+            <nav class="nav">
+              <div class="nav-left">
+                <div class="nav-logo-small"></div>
+                <span style="font-size: 18px; font-weight: 700;">Mosaic</span>
+              </div>
+              <div class="nav-tabs">
+                <button class="nav-tab" onclick="navigate('dashboard')">Dashboard</button>
+                <button class="nav-tab active" onclick="navigate('insights')">Insights</button>
+                <button class="nav-tab" onclick="navigate('goals')">Goals</button>
+                <button class="nav-tab" onclick="navigate('spending')">Spending</button>
+                <button class="nav-tab" onclick="navigate('credit')">Credit</button>
+                <button class="nav-tab" onclick="navigate('advisor')">Should I Buy?</button>
+                <button class="nav-tab" onclick="navigate('settings')">Settings</button>
+              </div>
+              <div>
+                <span style="color: #E8E8E8; font-weight: 400;">${state.user.name}</span>
+              </div>
+            </nav>
+            <div class="content">
+              <div class="section-header">
+                <h2>Insights</h2>
+                <p>Personalized recommendations based on your spending</p>
+              </div>
+              <div class="stat-card" style="margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;">
+                  <div>
+                    <h3 style="color: #FFFFFF; font-size: 20px; margin-bottom: 8px; font-weight: 600;">Coffee Spending</h3>
+                    <p style="color: rgba(255,255,255,0.5); font-size: 14px; margin-bottom: 12px;">Starbucks, Dunkin', Local Cafes</p>
+                  </div>
+                  <div style="text-align: right;">
+                    <div style="font-size: 32px; color: #F97316; font-weight: 700;">$186</div>
+                    <div style="font-size: 13px; color: rgba(255,255,255,0.5);">per month</div>
+                  </div>
+                </div>
+                <p style="color: rgba(255,255,255,0.7); font-size: 15px; line-height: 1.6; margin-bottom: 16px;">You visit coffee shops 42 times per month. Brewing at home 3 days per week could save you <strong style="color: #10B981;">$90/month ($1,080/year)</strong>.</p>
+                <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 12px;">
+                  <strong style="color: #10B981; font-size: 14px; font-weight: 600;">Recommendation:</strong>
+                  <p style="color: rgba(255,255,255,0.8); font-size: 14px; margin: 8px 0 0 0;">Buy a quality coffee maker ($50) and save $40 in the first month alone.</p>
+                </div>
+              </div>
+              <div class="stat-card" style="margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;">
+                  <div>
+                    <h3 style="color: #FFFFFF; font-size: 20px; margin-bottom: 8px; font-weight: 600;">Food Delivery</h3>
+                    <p style="color: rgba(255,255,255,0.5); font-size: 14px; margin-bottom: 12px;">Uber Eats, DoorDash, Grubhub</p>
+                  </div>
+                  <div style="text-align: right;">
+                    <div style="font-size: 32px; color: #EF4444; font-weight: 700;">$380</div>
+                    <div style="font-size: 13px; color: rgba(255,255,255,0.5);">per month</div>
+                  </div>
+                </div>
+                <p style="color: rgba(255,255,255,0.7); font-size: 15px; line-height: 1.6; margin-bottom: 16px;">You order delivery 18 times per month. Reducing to 8 orders (2/week) would save <strong style="color: #10B981;">$200/month ($2,400/year)</strong> and improve your health score by 3 points.</p>
+                <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 12px;">
+                  <strong style="color: #10B981; font-size: 14px; font-weight: 600;">Recommendation:</strong>
+                  <p style="color: #E8E8E8; font-size: 14px; margin: 8px 0 0 0; font-weight: 400;">Meal prep on Sundays. With $200/month savings, you could fund a vacation in 6 months!</p>
+                </div>
+              </div>
+              <div class="stat-card" style="margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;">
+                  <div>
+                    <h3 style="color: #FFFFFF; font-size: 20px; margin-bottom: 8px; font-weight: 600;">Unused Subscriptions</h3>
+                    <p style="color: rgba(255,255,255,0.5); font-size: 14px; margin-bottom: 12px;">HBO Max, Disney+, Hulu</p>
+                  </div>
+                  <div style="text-align: right;">
+                    <div style="font-size: 32px; color: #A855F7; font-weight: 700;">$67</div>
+                    <div style="font-size: 13px; color: rgba(255,255,255,0.5);">per month</div>
+                  </div>
+                </div>
+                <p style="color: rgba(255,255,255,0.7); font-size: 15px; line-height: 1.6; margin-bottom: 16px;">You haven't used HBO Max in 45 days and Disney+ in 30 days. Canceling both saves <strong style="color: #10B981;">$30/month ($360/year)</strong>.</p>
+                <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 12px;">
+                  <strong style="color: #10B981; font-size: 14px; font-weight: 600;">Recommendation:</strong>
+                  <p style="color: #E8E8E8; font-size: 14px; margin: 8px 0 0 0; font-weight: 400;">Keep Netflix and Spotify. Cancel the rest and resubscribe only when you need them.</p>
+                </div>
+              </div>
+              <div class="stat-card">
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;">
+                  <div>
+                    <h3 style="color: #FFFFFF; font-size: 20px; margin-bottom: 8px; font-weight: 600;">Credit Utilization</h3>
+                    <p style="color: rgba(255,255,255,0.5); font-size: 14px; margin-bottom: 12px;">Chase Freedom, Amex Blue</p>
+                  </div>
+                  <div style="text-align: right;">
+                    <div style="font-size: 32px; color: #10B981; font-weight: 700;">18%</div>
+                    <div style="font-size: 13px; color: rgba(255,255,255,0.5);">utilization</div>
+                  </div>
+                </div>
+                <p style="color: rgba(255,255,255,0.7); font-size: 15px; line-height: 1.6; margin-bottom: 16px;">Great job! Your credit utilization is at 18%, well below the recommended 30%. This positively impacts your credit score.</p>
+                <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 12px;">
+                  <strong style="color: #10B981; font-size: 14px; font-weight: 600;">Keep it up!</strong>
+                  <p style="color: #E8E8E8; font-size: 14px; margin: 8px 0 0 0; font-weight: 400;">Maintain utilization below 30% and make on-time payments to improve your score.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      else if (state.page === 'goals') {
+        app.innerHTML = `
+          <div class="dashboard">
+            <nav class="nav">
+              <div class="nav-left">
+                <div class="nav-logo-small"></div>
+                <span style="font-size: 18px; font-weight: 700;">Mosaic</span>
+              </div>
+              <div class="nav-tabs">
+                <button class="nav-tab" onclick="navigate('dashboard')">Dashboard</button>
+                <button class="nav-tab" onclick="navigate('insights')">Insights</button>
+                <button class="nav-tab active" onclick="navigate('goals')">Goals</button>
+                <button class="nav-tab" onclick="navigate('spending')">Spending</button>
+                <button class="nav-tab" onclick="navigate('credit')">Credit</button>
+                <button class="nav-tab" onclick="navigate('settings')">Settings</button>
+              </div>
+              <div>
+                <span style="color: rgba(255,255,255,0.7);">${state.user.name}</span>
+              </div>
+            </nav>
+            <div class="content">
+              <div class="section-header">
+                <h2>Goals</h2>
+                <p>Create your savings goals and track progress</p>
+              </div>
+              <div style="text-align: center; padding: 80px 20px;">
+                <h3 style="color: #E8E8E8; font-size: 24px; margin-bottom: 16px; font-weight: 500;">No goals yet</h3>
+                <p style="color: #D0D0D0; font-size: 16px; margin-bottom: 32px; font-weight: 400;">Start by creating your first savings goal</p>
+                <button class="btn btn-primary" onclick="alert('Create goal feature coming soon!')">Create New Goal</button>
+              </div>
+              <div style="display: none;">
+              <div class="stat-card" style="margin-bottom: 20px; display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;">
+                  <div>
+                    <h3 style="color: #FFFFFF; font-size: 24px; margin-bottom: 8px; font-weight: 600;">MacBook Pro</h3>
+                    <p style="color: rgba(255,255,255,0.5); font-size: 14px;">Electronics • Target: $1,999</p>
+                  </div>
+                  <div style="text-align: right;">
+                    <div style="font-size: 32px; color: #10B981; font-weight: 700;">$900</div>
+                    <div style="font-size: 13px; color: rgba(255,255,255,0.5);">saved so far</div>
+                  </div>
+                </div>
+                <div style="background: rgba(16, 185, 129, 0.2); height: 12px; border-radius: 6px; margin: 16px 0; overflow: hidden;">
+                  <div style="width: 45%; height: 100%; background: linear-gradient(90deg, #10B981, #34D399); border-radius: 6px; box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);"></div>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 14px; color: rgba(255,255,255,0.7);">
+                  <span>45% complete</span>
+                  <span>$1,099 remaining</span>
+                </div>
+                <div style="background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 8px; padding: 12px; margin-top: 16px;">
+                  <strong style="color: #06B6D4; font-size: 14px; font-weight: 600;">AI Coaching:</strong>
+                  <p style="color: rgba(255,255,255,0.8); font-size: 14px; margin: 8px 0 0 0;">Save $275/month to reach your goal in 4 months. Cut dining by $130 and subscriptions by $30 to stay on track!</p>
+                </div>
+              </div>
+              <div class="stat-card" style="margin-bottom: 20px; display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;">
+                  <div>
+                    <h3 style="color: #FFFFFF; font-size: 24px; margin-bottom: 8px; font-weight: 600;">Vacation Fund</h3>
+                    <p style="color: rgba(255,255,255,0.5); font-size: 14px;">Travel • Target: $3,500</p>
+                  </div>
+                  <div style="text-align: right;">
+                    <div style="font-size: 32px; color: #10B981; font-weight: 700;">$2,380</div>
+                    <div style="font-size: 13px; color: rgba(255,255,255,0.5);">saved so far</div>
+                  </div>
+                </div>
+                <div style="background: rgba(16, 185, 129, 0.2); height: 12px; border-radius: 6px; margin: 16px 0; overflow: hidden;">
+                  <div style="width: 68%; height: 100%; background: linear-gradient(90deg, #FBBF24, #F97316); border-radius: 6px; box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);"></div>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 14px; color: rgba(255,255,255,0.7);">
+                  <span>68% complete</span>
+                  <span>$1,120 remaining</span>
+                </div>
+                <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 12px; margin-top: 16px;">
+                  <strong style="color: #10B981; font-size: 14px; font-weight: 600;">Almost there!</strong>
+                  <p style="color: rgba(255,255,255,0.8); font-size: 14px; margin: 8px 0 0 0;">You're on track to hit this goal in just 2 months! Keep up your current savings rate.</p>
+                </div>
+              </div>
+              <div class="stat-card" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;">
+                  <div>
+                    <h3 style="color: #FFFFFF; font-size: 24px; margin-bottom: 8px; font-weight: 600;">Emergency Fund</h3>
+                    <p style="color: rgba(255,255,255,0.5); font-size: 14px;">Safety Net • Target: $12,000</p>
+                  </div>
+                  <div style="text-align: right;">
+                    <div style="font-size: 32px; color: #F97316; font-weight: 700;">$3,420</div>
+                    <div style="font-size: 13px; color: rgba(255,255,255,0.5);">saved so far</div>
+                  </div>
+                </div>
+                <div style="background: rgba(16, 185, 129, 0.2); height: 12px; border-radius: 6px; margin: 16px 0; overflow: hidden;">
+                  <div style="width: 28%; height: 100%; background: linear-gradient(90deg, #EF4444, #F97316); border-radius: 6px; box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);"></div>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 14px; color: rgba(255,255,255,0.7);">
+                  <span>28% complete</span>
+                  <span>$8,580 remaining</span>
+                </div>
+                <div style="background: rgba(255, 222, 89, 0.1); border: 1px solid rgba(255, 222, 89, 0.3); border-radius: 8px; padding: 12px; margin-top: 16px;">
+                  <strong style="color: #FBBF24; font-size: 14px; font-weight: 600;">Priority Goal:</strong>
+                  <p style="color: rgba(255,255,255,0.8); font-size: 14px; margin: 8px 0 0 0;">Aim for 6 months of expenses ($12k). Save $715/month to reach this in 12 months.</p>
+                </div>
+              </div></div>
+            </div>
+          </div>
+        `;
+      }
+      else if (state.page === 'spending') {
+        app.innerHTML = `
+          <div class="dashboard">
+            <nav class="nav">
+              <div class="nav-left">
+                <div class="nav-logo-small"></div>
+                <span style="font-size: 18px; font-weight: 700;">Mosaic</span>
+              </div>
+              <div class="nav-tabs">
+                <button class="nav-tab" onclick="navigate('dashboard')">Dashboard</button>
+                <button class="nav-tab" onclick="navigate('insights')">Insights</button>
+                <button class="nav-tab" onclick="navigate('goals')">Goals</button>
+                <button class="nav-tab active" onclick="navigate('spending')">Spending</button>
+                <button class="nav-tab" onclick="navigate('credit')">Credit</button>
+                <button class="nav-tab" onclick="navigate('settings')">Settings</button>
+              </div>
+              <div>
+                <span style="color: rgba(255,255,255,0.7);">${state.user.name}</span>
+              </div>
+            </nav>
+            <div class="content">
+              <div class="section-header">
+                <h2>Spending Analysis</h2>
+                <p>Breakdown of your monthly expenses</p>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px;">
+                <div class="stat-card">
+                  <div class="stat-label">Total Spending</div>
+                  <div class="stat-value">$${state.data.spending}</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-label">Average Daily</div>
+                  <div class="stat-value">$${Math.floor(state.data.spending / 30)}</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-label">vs Last Month</div>
+                  <div class="stat-value" style="color: #10B981;">-5%</div>
+                </div>
+              </div>
+              <h3 style="color: #FFFFFF; margin-bottom: 24px; font-size: 20px; font-weight: 600;">Spending by Category</h3>
+              <div class="categories-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px;">
+                <div class="category-card" onclick="showCategoryDetail('Groceries', 520)">
+                  <div class="category-name">Groceries</div>
+                  <div class="category-amount">$520</div>
+                  <div style="font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 8px;">24% of spending</div>
+                </div>
+                <div class="category-card" onclick="showCategoryDetail('Dining', 380)">
+                  <div class="category-name">Dining</div>
+                  <div class="category-amount">$380</div>
+                  <div style="font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 8px;">17% of spending</div>
+                </div>
+                <div class="category-card" onclick="showCategoryDetail('Shopping', 450)">
+                  <div class="category-name">Shopping</div>
+                  <div class="category-amount">$450</div>
+                  <div style="font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 8px;">20% of spending</div>
+                </div>
+                <div class="category-card" onclick="showCategoryDetail('Transport', 320)">
+                  <div class="category-name">Transport</div>
+                  <div class="category-amount">$320</div>
+                  <div style="font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 8px;">15% of spending</div>
+                </div>
+                <div class="category-card" onclick="showCategoryDetail('Utilities', 280)">
+                  <div class="category-name">Utilities</div>
+                  <div class="category-amount">$280</div>
+                  <div style="font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 8px;">13% of spending</div>
+                </div>
+                <div class="category-card" onclick="showCategoryDetail('Subscriptions', 192)">
+                  <div class="category-name">Subscriptions</div>
+                  <div class="category-amount">$192</div>
+                  <div style="font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 8px;">9% of spending</div>
+                </div>
+              </div>
+              <div style="margin-top: 40px;">
+                <h3 style="color: #FFFFFF; margin-bottom: 24px; font-size: 20px; font-weight: 600;">Recent Transactions</h3>
+                <div style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 24px;">
+                  <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <div>
+                      <div style="color: #FFFFFF; font-size: 15px; font-weight: 500;">Whole Foods</div>
+                      <div style="color: #D0D0D0; font-size: 13px; font-weight: 400;">Groceries - Nov 8</div>
+                    </div>
+                    <div style="color: #FFFFFF; font-size: 16px; font-weight: 500;">$52.30</div>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <div>
+                      <div style="color: #FFFFFF; font-size: 15px; font-weight: 500;">Uber Eats</div>
+                      <div style="color: #D0D0D0; font-size: 13px; font-weight: 400;">Dining - Nov 8</div>
+                    </div>
+                    <div style="color: #FFFFFF; font-size: 16px; font-weight: 500;">$28.00</div>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <div>
+                      <div style="color: #FFFFFF; font-size: 15px; font-weight: 500;">Shell Gas</div>
+                      <div style="color: #D0D0D0; font-size: 13px; font-weight: 400;">Transport - Nov 7</div>
+                    </div>
+                    <div style="color: white; font-size: 16px; font-weight: 600;">$52.40</div>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; padding: 12px 0;">
+                    <div>
+                      <div style="color: #FFFFFF; font-size: 15px; font-weight: 500;">Amazon</div>
+                      <div style="color: #D0D0D0; font-size: 13px; font-weight: 400;">Shopping - Nov 6</div>
+                    </div>
+                    <div style="color: white; font-size: 16px; font-weight: 600;">$89.50</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      else if (state.page === 'credit') {
+        const creditScore = Math.floor((state.data.score / 100) * 850);
+        const creditGrade = creditScore >= 740 ? 'Excellent' : creditScore >= 670 ? 'Good' : creditScore >= 580 ? 'Fair' : 'Poor';
+        const gradeColor = creditScore >= 740 ? '#10B981' : creditScore >= 670 ? '#34D399' : creditScore >= 580 ? '#FBBF24' : '#EF4444';
+        app.innerHTML = `
+          <div class="dashboard">
+            <nav class="nav">
+              <div class="nav-left">
+                <div class="nav-logo-small"></div>
+                <span style="font-size: 18px; font-weight: 700;">Mosaic</span>
+              </div>
+              <div class="nav-tabs">
+                <button class="nav-tab" onclick="navigate('dashboard')">Dashboard</button>
+                <button class="nav-tab" onclick="navigate('insights')">Insights</button>
+                <button class="nav-tab" onclick="navigate('goals')">Goals</button>
+                <button class="nav-tab" onclick="navigate('spending')">Spending</button>
+                <button class="nav-tab active" onclick="navigate('credit')">Credit</button>
+                <button class="nav-tab" onclick="navigate('settings')">Settings</button>
+              </div>
+              <div>
+                <span style="color: rgba(255,255,255,0.7);">${state.user.name}</span>
+              </div>
+            </nav>
+            <div class="content">
+              <div class="section-header">
+                <h2>Credit Health</h2>
+                <p>Analysis of your credit profile</p>
+              </div>
+              <div class="stat-card" style="text-align: center; padding: 48px; margin-bottom: 32px;">
+                <div style="font-size: 96px; font-weight: 800; color: ${gradeColor}; margin-bottom: 16px;">${creditScore}</div>
+                <div style="font-size: 24px; color: ${gradeColor}; font-weight: 600; margin-bottom: 8px;">${creditGrade}</div>
+                <p style="font-size: 14px; color: rgba(255,255,255,0.5);">Estimated based on financial health score (${state.data.score}/100)</p>
+              </div>
+              <h3 style="color: white; margin-bottom: 24px; font-size: 20px;">Credit Factors</h3>
+              <div style="display: grid; gap: 16px;">
+                <div class="stat-card">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <div>
+                      <h4 style="color: white; font-size: 16px; margin-bottom: 4px;">Payment History</h4>
+                      <p style="color: rgba(255,255,255,0.5); font-size: 13px;">35% of score</p>
+                    </div>
+                    <div style="font-size: 32px; color: #10B981; font-weight: 700;">100%</div>
+                  </div>
+                  <div style="background: rgba(16, 185, 129, 0.2); height: 8px; border-radius: 4px; overflow: hidden;">
+                    <div style="width: 100%; height: 100%; background: #10B981; border-radius: 4px;"></div>
+                  </div>
+                  <p style="color: rgba(255,255,255,0.7); font-size: 14px; margin-top: 12px;">Excellent! All payments on time for the past 24 months.</p>
+                </div>
+                <div class="stat-card">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <div>
+                      <h4 style="color: white; font-size: 16px; margin-bottom: 4px;">Credit Utilization</h4>
+                      <p style="color: rgba(255,255,255,0.5); font-size: 13px;">30% of score</p>
+                    </div>
+                    <div style="font-size: 32px; color: #10B981; font-weight: 700;">18%</div>
+                  </div>
+                  <div style="background: rgba(16, 185, 129, 0.2); height: 8px; border-radius: 4px; overflow: hidden;">
+                    <div style="width: 18%; height: 100%; background: #10B981; border-radius: 4px;"></div>
+                  </div>
+                  <p style="color: rgba(255,255,255,0.7); font-size: 14px; margin-top: 12px;">Great! Using only 18% of available credit. Keep it below 30%.</p>
+                </div>
+                <div class="stat-card">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <div>
+                      <h4 style="color: white; font-size: 16px; margin-bottom: 4px;">Length of History</h4>
+                      <p style="color: rgba(255,255,255,0.5); font-size: 13px;">15% of score</p>
+                    </div>
+                    <div style="font-size: 32px; color: #34D399; font-weight: 700;">5.2 yrs</div>
+                  </div>
+                  <div style="background: rgba(52, 211, 153, 0.2); height: 8px; border-radius: 4px; overflow: hidden;">
+                    <div style="width: 65%; height: 100%; background: #34D399; border-radius: 4px;"></div>
+                  </div>
+                  <p style="color: rgba(255,255,255,0.7); font-size: 14px; margin-top: 12px;">Good. Average account age improves with time.</p>
+                </div>
+                <div class="stat-card">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <div>
+                      <h4 style="color: white; font-size: 16px; margin-bottom: 4px;">New Credit</h4>
+                      <p style="color: rgba(255,255,255,0.5); font-size: 13px;">10% of score</p>
+                    </div>
+                    <div style="font-size: 32px; color: #FBBF24; font-weight: 700;">2</div>
+                  </div>
+                  <div style="background: rgba(251, 191, 36, 0.2); height: 8px; border-radius: 4px; overflow: hidden;">
+                    <div style="width: 40%; height: 100%; background: #FBBF24; border-radius: 4px;"></div>
+                  </div>
+                  <p style="color: rgba(255,255,255,0.7); font-size: 14px; margin-top: 12px;">2 inquiries in the last 6 months. Avoid new applications for now.</p>
+                </div>
+              </div>
+              <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 16px; padding: 32px; margin-top: 32px;">
+                <h3 style="color: #10B981; font-size: 20px; margin-bottom: 20px; font-weight: 600;">Recommendations</h3>
+                <div style="margin-bottom: 16px;">
+                  <p style="color: #E8E8E8; font-size: 15px; line-height: 1.7; font-weight: 400;">Continue on-time payments - This is your biggest factor (35%)</p>
+                </div>
+                <div style="margin-bottom: 16px;">
+                  <p style="color: #E8E8E8; font-size: 15px; line-height: 1.7; font-weight: 400;">Keep utilization below 10% - You're at 18%, try to lower it further</p>
+                </div>
+                <div style="margin-bottom: 16px;">
+                  <p style="color: #E8E8E8; font-size: 15px; line-height: 1.7; font-weight: 400;">Don't close old accounts - They increase your average age</p>
+                </div>
+                <div>
+                  <p style="color: #E8E8E8; font-size: 15px; line-height: 1.7; font-weight: 400;">Wait 6 months before new credit - Let recent inquiries age</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      else if (state.page === 'settings') {
+        app.innerHTML = `
+          <div class="dashboard">
+            <nav class="nav">
+              <div class="nav-left">
+                <div class="nav-logo-small"></div>
+                <span style="font-size: 18px; font-weight: 700;">Mosaic</span>
+              </div>
+              <div class="nav-tabs">
+                <button class="nav-tab" onclick="navigate('dashboard')">Dashboard</button>
+                <button class="nav-tab" onclick="navigate('insights')">Insights</button>
+                <button class="nav-tab" onclick="navigate('goals')">Goals</button>
+                <button class="nav-tab" onclick="navigate('spending')">Spending</button>
+                <button class="nav-tab" onclick="navigate('credit')">Credit</button>
+                <button class="nav-tab active" onclick="navigate('settings')">Settings</button>
+              </div>
+              <div>
+                <span style="color: rgba(255,255,255,0.7);">${state.user.name}</span>
+              </div>
+            </nav>
+            <div class="content">
+              <div class="section-header">
+                <h2>Settings</h2>
+                <p>Manage your account and preferences</p>
+              </div>
+              <div class="stat-card" style="margin-bottom: 20px;">
+                <h3 style="color: #FFFFFF; font-size: 20px; margin-bottom: 20px; font-weight: 600;">Account Information</h3>
+                <div style="margin-bottom: 16px;">
+                  <div style="color: rgba(255,255,255,0.5); font-size: 13px; margin-bottom: 4px;">Name</div>
+                  <div style="color: white; font-size: 16px;">${state.user.name}</div>
+                </div>
+                <div style="margin-bottom: 16px;">
+                  <div style="color: rgba(255,255,255,0.5); font-size: 13px; margin-bottom: 4px;">Email</div>
+                  <div style="color: white; font-size: 16px;">${state.user.email}</div>
+                </div>
+                <div style="margin-bottom: 20px;">
+                  <div style="color: rgba(255,255,255,0.5); font-size: 13px; margin-bottom: 4px;">Member Since</div>
+                  <div style="color: white; font-size: 16px;">November 2025</div>
+                </div>
+                <button class="btn btn-secondary" style="width: auto; padding: 10px 20px;">Change Password</button>
+              </div>
+              <div class="stat-card" style="margin-bottom: 20px;">
+                <h3 style="color: #FFFFFF; font-size: 20px; margin-bottom: 20px; font-weight: 600;">Linked Banks</h3>
+                <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; margin-bottom: 16px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                      <div style="color: white; font-size: 16px; font-weight: 600; margin-bottom: 4px;">${state.user.bank || 'No bank connected'}</div>
+                      <div style="color: rgba(255,255,255,0.5); font-size: 13px;">Connected • Last synced: ${state.data.lastSynced}</div>
+                    </div>
+                    <button class="btn btn-secondary" onclick="if(confirm('Disconnect ${state.user.bank}?')) { state.user.bank = null; navigate('bank-selection'); }" style="width: auto; padding: 8px 16px; font-size: 13px; background: rgba(255,107,107,0.2); border: 1px solid rgba(255,107,107,0.4); color: #FF6B6B;">Disconnect</button>
+                  </div>
+                </div>
+                <button class="btn btn-primary" onclick="navigate('bank-selection')" style="width: auto; padding: 10px 20px;">+ Add Another Bank</button>
+              </div>
+              <div class="stat-card" style="margin-bottom: 20px;">
+                <h3 style="color: #FFFFFF; font-size: 20px; margin-bottom: 20px; font-weight: 600;">Preferences</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                  <div>
+                    <div style="color: white; font-size: 15px; font-weight: 600; margin-bottom: 4px;">Email Notifications</div>
+                    <div style="color: rgba(255,255,255,0.5); font-size: 13px;">Receive insights and alerts</div>
+                  </div>
+                  <label style="position: relative; display: inline-block; width: 50px; height: 26px;">
+                    <input type="checkbox" checked style="opacity: 0; width: 0; height: 0;">
+                    <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #10B981; transition: 0.4s; border-radius: 26px;"></span>
+                  </label>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                  <div>
+                    <div style="color: white; font-size: 15px; font-weight: 600; margin-bottom: 4px;">Dark Mode</div>
+                    <div style="color: rgba(255,255,255,0.5); font-size: 13px;">Always enabled</div>
+                  </div>
+                  <label style="position: relative; display: inline-block; width: 50px; height: 26px;">
+                    <input type="checkbox" checked disabled style="opacity: 0; width: 0; height: 0;">
+                    <span style="position: absolute; cursor: not-allowed; top: 0; left: 0; right: 0; bottom: 0; background-color: #10B981; transition: 0.4s; border-radius: 26px; opacity: 0.5;"></span>
+                  </label>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0;">
+                  <div>
+                    <div style="color: white; font-size: 15px; font-weight: 600; margin-bottom: 4px;">Weekly Reports</div>
+                    <div style="color: rgba(255,255,255,0.5); font-size: 13px;">Sunday summary emails</div>
+                  </div>
+                  <label style="position: relative; display: inline-block; width: 50px; height: 26px;">
+                    <input type="checkbox" checked style="opacity: 0; width: 0; height: 0;">
+                    <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #10B981; transition: 0.4s; border-radius: 26px;"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="stat-card" style="border: 1px solid rgba(255,107,107,0.3); background: rgba(255,107,107,0.05);">
+                <h3 style="color: #FF6B6B; font-size: 20px; margin-bottom: 20px; font-weight: 600;">Danger Zone</h3>
+                <div style="margin-bottom: 20px;">
+                  <div style="color: white; font-size: 15px; font-weight: 600; margin-bottom: 8px;">Export Data</div>
+                  <p style="color: rgba(255,255,255,0.6); font-size: 14px; margin-bottom: 12px;">Download all your financial data</p>
+                  <button class="btn btn-secondary" style="width: auto; padding: 10px 20px;">Download CSV</button>
+                </div>
+                <div>
+                  <div style="color: white; font-size: 15px; font-weight: 600; margin-bottom: 8px;">Log Out</div>
+                  <p style="color: rgba(255,255,255,0.6); font-size: 14px; margin-bottom: 12px;">Sign out of your account</p>
+                  <button class="btn btn-secondary" onclick="handleLogout()" style="width: auto; padding: 10px 20px; background: rgba(255,107,107,0.2); border: 1px solid rgba(255,107,107,0.4); color: #FF6B6B;">Log Out</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      else if (state.page === 'signin') {
+        app.innerHTML = `
+          <div class="page">
+            <div class="form-container">
+              <button class="back-btn" onclick="navigate('home')">← Back</button>
+              <div class="logo" style="margin: 0 auto 24px;"></div>
+              <h1>Sign In</h1>
+              <p class="tagline">Welcome back to Mosaic</p>
+              <div class="error" id="error"></div>
+              <form onsubmit="handleSignin(event)">
+                <input type="email" class="form-input" id="email" placeholder="Email" required>
+                <input type="password" class="form-input" id="password" placeholder="Password" required>
+                <button type="submit" class="btn btn-primary">Sign In</button>
+              </form>
+              <div class="demo-box" style="margin-top: 24px;">
+                <p>Demo Account:</p>
+                <p class="demo-credentials">demo@mosaic.com / demo123</p>
+              </div>
+              <p class="link-text">Don't have an account? <button class="link-btn" onclick="navigate('signup')">Sign up</button></p>
+            </div>
+          </div>
+        `;
+      }
+      else if (state.page === 'bank-selection') {
+        app.innerHTML = `
+          <div class="page">
+            <div class="form-container">
+              <h1>Connect Your Bank</h1>
+              <p class="tagline">Select your bank and enter account details</p>
+              <form onsubmit="handleBankConnect(event)" style="margin-top: 40px;">
+                <label style="display: block; color: rgba(255, 255, 255, 0.8); font-size: 14px; font-weight: 600; margin-bottom: 8px;">Select Your Bank</label>
+                <select id="bank-select" class="form-input" required style="margin-bottom: 16px;">
+                  <option value="">Choose your bank...</option>
+                  <option value="Wells Fargo">Wells Fargo</option>
+                  <option value="Citibank">Citibank</option>
+                  <option value="Bank of America">Bank of America</option>
+                  <option value="Chase">Chase</option>
+                  <option value="Chime">Chime</option>
+                  <option value="Stride Bank">Stride Bank</option>
+                  <option value="Capital One">Capital One</option>
+                  <option value="US Bank">US Bank</option>
+                  <option value="Ally Bank">Ally Bank</option>
+                  <option value="TD Bank">TD Bank</option>
+                  <option value="PNC">PNC</option>
+                  <option value="HSBC">HSBC</option>
+                  <option value="Discover">Discover</option>
+                  <option value="Charles Schwab">Charles Schwab</option>
+                  <option value="Fidelity">Fidelity</option>
+                  <option value="E*TRADE">E*TRADE</option>
+                  <option value="Other">Other</option>
+                </select>
+                
+                <label style="display: block; color: rgba(255, 255, 255, 0.8); font-size: 14px; font-weight: 600; margin-bottom: 8px;">Account Number</label>
+                <input type="text" id="account-number" class="form-input" placeholder="8-12 digit account number" pattern="[0-9]{8,12}" minlength="8" maxlength="12" required>
+                
+                <label style="display: block; color: rgba(255, 255, 255, 0.8); font-size: 14px; font-weight: 600; margin-bottom: 8px;">Routing Number</label>
+                <input type="text" id="routing-number" class="form-input" placeholder="9-digit routing number" pattern="[0-9]{9}" maxlength="9" required>
+                
+                <label style="display: block; color: rgba(255, 255, 255, 0.8); font-size: 14px; font-weight: 600; margin-bottom: 8px;">Username</label>
+                <input type="text" id="bank-username" class="form-input" placeholder="Your bank login username" minlength="3" required>
+                
+                <label style="display: block; color: rgba(255, 255, 255, 0.8); font-size: 14px; font-weight: 600; margin-bottom: 8px;">Password</label>
+                <input type="password" id="bank-password" class="form-input" placeholder="Your bank password" minlength="4" required>
+                <div id="bank-validation-error" style="display: none; background: rgba(255, 107, 107, 0.1); color: #FF6B6B; padding: 12px; border-radius: 8px; font-size: 14px; margin-top: 12px;"></div>
+                
+                <button type="submit" class="btn btn-primary" style="margin-top: 24px;">Connect Bank Account</button>
+              </form>
+            </div>
+          </div>
+        `;
+      }
+      else if (state.page === 'advisor') {
+        app.innerHTML = `
+          <div class="dashboard">
+            <nav class="nav">
+              <div class="nav-left">
+                <div class="nav-logo-small"></div>
+                <span style="font-size: 18px; font-weight: 700;">Mosaic</span>
+              </div>
+              <div class="nav-tabs">
+                <button class="nav-tab" onclick="navigate('dashboard')">Dashboard</button>
+                <button class="nav-tab" onclick="navigate('insights')">Insights</button>
+                <button class="nav-tab" onclick="navigate('goals')">Goals</button>
+                <button class="nav-tab" onclick="navigate('spending')">Spending</button>
+                <button class="nav-tab" onclick="navigate('credit')">Credit</button>
+                <button class="nav-tab active" onclick="navigate('advisor')">Should I Buy?</button>
+                <button class="nav-tab" onclick="navigate('settings')">Settings</button>
+              </div>
+              <div>
+                <span style="color: rgba(255,255,255,0.7);">${state.user.name}</span>
+              </div>
+            </nav>
+            <div class="content">
+              <div class="section-header">
+                <h2>AI Purchase Advisor</h2>
+                <p>Should I Buy This?</p>
+              </div>
+              
+              <div style="max-width: 800px; margin: 0 auto;">
+                <div style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 32px; margin-bottom: 32px;">
+                  <label style="display: block; color: white; font-size: 16px; font-weight: 500; margin-bottom: 16px;">Enter Product URL</label>
+                  <div style="display: flex; gap: 12px;">
+                    <input type="text" id="product-url" class="form-input" placeholder="https://www.amazon.com/product or https://www.apple.com/macbook-pro" style="flex: 1; margin-bottom: 0; height: 52px; font-size: 15px;">
+                    <button class="btn btn-primary" onclick="analyzePurchase()" style="width: auto; padding: 0 32px; height: 52px;">Analyze</button>
+                  </div>
+                </div>
+
+                <div id="analysis-loading" style="display: none; text-align: center; padding: 40px;">
+                  <div style="width: 48px; height: 48px; border: 3px solid rgba(16,185,129,0.2); border-top-color: #10B981; border-radius: 50%; margin: 0 auto 20px; animation: spin 0.8s linear infinite;"></div>
+                  <p style="color: rgba(255,255,255,0.7); font-size: 15px;">Analyzing product and your finances...</p>
+                </div>
+
+                <div id="analysis-results"></div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      else if (state.page === 'dashboard') {
+        app.innerHTML = `
+          <div class="dashboard">
+            <nav class="nav">
+              <div class="nav-left">
+                <div class="nav-logo-small"></div>
+                <span style="font-size: 18px; font-weight: 700;">Mosaic</span>
+              </div>
+              <div class="nav-tabs">
+                <button class="nav-tab active" onclick="navigate('dashboard')">Dashboard</button>
+                <button class="nav-tab" onclick="navigate('insights')">Insights</button>
+                <button class="nav-tab" onclick="navigate('goals')">Goals</button>
+                <button class="nav-tab" onclick="navigate('spending')">Spending</button>
+                <button class="nav-tab" onclick="navigate('credit')">Credit</button>
+                <button class="nav-tab" onclick="navigate('settings')">Settings</button>
+              </div>
+              <div>
+                <span style="color: rgba(255,255,255,0.7);">${state.user.name}</span>
+              </div>
+            </nav>
+            <div class="content">
+              <div class="section-header">
+                <h2>Dashboard</h2>
+                <p>Welcome back, ${state.user.name}</p>
+              </div>
+              
+              <div class="mosaic-container">
+                <div class="coin" id="coin"></div>
+                <div class="score">
+                  <div class="score-label">Financial Health Score</div>
+                  <h2>${state.data.score}/100</h2>
+                  <p>Click any segment to explore your finances</p>
+                </div>
+              </div>
+
+              <div class="stats">
+                <div class="stat-card">
+                  <div class="stat-label">Balance</div>
+                  <div class="stat-value">$${state.data.balance.toFixed(0)}</div>
+                  <div style="font-size: 11px; color: #A8A8A8; margin-top: 8px; display: flex; align-items: center; gap: 4px; font-weight: 400;"><span style="color: #10B981;">Bank-connected data</span></div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-label">Monthly Income</div>
+                  <div class="stat-value">$${state.data.income}</div>
+                  <div style="font-size: 11px; color: #A8A8A8; margin-top: 8px; font-weight: 400;">From ${state.user.bank}</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-label">Monthly Spending</div>
+                  <div class="stat-value">$${state.data.spending}</div>
+                  <div style="font-size: 11px; color: #A8A8A8; margin-top: 8px; font-weight: 400;">Last synced: ${state.data.lastSynced}</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-label">Carbon Footprint</div>
+                  <div class="stat-value">${state.data.carbonFootprint} kg</div>
+                  <div style="font-size: 11px; color: #10B981; margin-top: 8px; font-weight: 400;">-${Math.abs(state.data.carbonTrend)}% vs last month</div>
+                </div>
+              </div>
+
+              <div style="background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 16px; padding: 32px; margin-bottom: 32px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                  <h3 style="color: #06B6D4; font-size: 20px; margin: 0; font-weight: 600;">Carbon Impact</h3>
+                  <div style="background: rgba(16, 185, 129, 0.2); border: 2px solid rgba(16, 185, 129, 0.5); border-radius: 12px; padding: 8px 16px;">
+                    <span style="font-size: 16px; color: #10B981; font-weight: 700;">${Math.floor((100 - (state.data.carbonFootprint / 4)) * 0.22)}/${22} Leaves</span>
+                  </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px;">
+                  <div>
+                    <div style="font-size: 12px; color: #A8A8A8; margin-bottom: 8px; font-weight: 400;">MONTHLY CO2</div>
+                    <div style="font-size: 32px; font-weight: 600; color: #FFFFFF;">${state.data.carbonFootprint} kg</div>
+                  </div>
+                  <div>
+                    <div style="font-size: 12px; color: #A8A8A8; margin-bottom: 8px; font-weight: 400;">TREND</div>
+                    <div style="font-size: 32px; font-weight: 600; color: #10B981;">-${Math.abs(state.data.carbonTrend)}%</div>
+                  </div>
+                  <div>
+                    <div style="font-size: 12px; color: #A8A8A8; margin-bottom: 8px; font-weight: 400;">VS AVERAGE</div>
+                    <div style="font-size: 32px; font-weight: 600; color: #10B981;">-12%</div>
+                  </div>
+                </div>
+                <div style="margin-bottom: 16px;">
+                  <div style="font-size: 14px; color: #E8E8E8; margin-bottom: 8px; font-weight: 500;">Top Contributors:</div>
+                  <div style="font-size: 14px; color: #D0D0D0; font-weight: 400;">Food delivery: 45% (128 kg CO2)</div>
+                  <div style="font-size: 14px; color: #D0D0D0; font-weight: 400;">Transport: 35% (100 kg CO2)</div>
+                  <div style="font-size: 14px; color: #D0D0D0; font-weight: 400;">Shopping: 20% (57 kg CO2)</div>
+                </div>
+                <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 16px;">
+                  <div style="font-size: 14px; color: #10B981; font-weight: 600; margin-bottom: 8px;">Recommendation</div>
+                  <div style="font-size: 14px; color: #E8E8E8; font-weight: 400;">Reduce delivery orders by 50% to save 70kg CO2/month. That's like planting 3 trees!</div>
+                </div>
+              </div>
+
+              <h3 style="color: white; margin-bottom: 24px; font-size: 20px;">Spending by Category</h3>
+              <div class="categories">
+                <div class="category-card">
+                  <div class="category-name">Groceries</div>
+                  <div class="category-amount">$520</div>
+                </div>
+                <div class="category-card">
+                  <div class="category-name">Dining</div>
+                  <div class="category-amount">$380</div>
+                </div>
+                <div class="category-card">
+                  <div class="category-name">Subscriptions</div>
+                  <div class="category-amount">$192</div>
+                </div>
+                <div class="category-card">
+                  <div class="category-name">Shopping</div>
+                  <div class="category-amount">$450</div>
+                </div>
+                <div class="category-card">
+                  <div class="category-name">Utilities</div>
+                  <div class="category-amount">$280</div>
+                </div>
+                <div class="category-card">
+                  <div class="category-name">Transport</div>
+                  <div class="category-amount">$320</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        setTimeout(renderCoin, 100);
+      }
+
+      console.log('Page rendered successfully');
+    }
+
+    // COIN MOSAIC WITH 12-20 LARGE FRAGMENTS
+    function renderCoin() {
+      const coin = document.getElementById('coin');
+      if (!coin) return;
+
+      const score = state.data.score;
+      const centerX = 200;
+      const centerY = 200;
+      const coinRadius = 180;
+      
+      // 15 large fragments arranged in circle
+      const numFragments = 15;
+      const carbonPenalty = Math.floor((state.data.carbonFootprint / 400) * numFragments);
+      const greenFragments = numFragments - carbonPenalty;
+      
+      const fragments = [];
+      for (let i = 0; i < numFragments; i++) {
+        const angle = (i / numFragments) * Math.PI * 2 - Math.PI / 2;
+        const nextAngle = ((i + 1) / numFragments) * Math.PI * 2 - Math.PI / 2;
+        
+        const innerRadius = coinRadius * 0.5;
+        const outerRadius = coinRadius;
+        
+        // Calculate polygon points for pie slice
+        const x1 = centerX + Math.cos(angle) * innerRadius;
+        const y1 = centerY + Math.sin(angle) * innerRadius;
+        const x2 = centerX + Math.cos(angle) * outerRadius;
+        const y2 = centerY + Math.sin(angle) * outerRadius;
+        const x3 = centerX + Math.cos(nextAngle) * outerRadius;
+        const y3 = centerY + Math.sin(nextAngle) * outerRadius;
+        const x4 = centerX + Math.cos(nextAngle) * innerRadius;
+        const y4 = centerY + Math.sin(nextAngle) * innerRadius;
+        
+        fragments.push({
+          points: `polygon(${x1}px ${y1}px, ${x2}px ${y2}px, ${x3}px ${y3}px, ${x4}px ${y4}px)`,
+          x: centerX + Math.cos((angle + nextAngle) / 2) * (innerRadius + outerRadius) / 2 - 25,
+          y: centerY + Math.sin((angle + nextAngle) / 2) * (innerRadius + outerRadius) / 2 - 25,
+          isGreen: i < greenFragments
+        });
+      }
+      
+      fragments.forEach((frag, i) => {
+        const div = document.createElement('div');
+        div.className = 'fragment';
+        div.style.left = frag.x + 'px';
+        div.style.top = frag.y + 'px';
+        div.style.width = '50px';
+        div.style.height = '50px';
+        div.style.clipPath = frag.points;
+        
+        if (frag.isGreen) {
+          div.style.setProperty('--fragment-color', '#10B981');
+          div.style.setProperty('--fragment-color-light', '#34D399');
+          div.style.setProperty('--fragment-rgb', '16, 185, 129');
+          div.style.opacity = '0.85';
+          div.title = 'Healthy Finance';
+        } else {
+          div.style.setProperty('--fragment-color', '#888888');
+          div.style.setProperty('--fragment-color-light', '#666666');
+          div.style.setProperty('--fragment-rgb', '136, 136, 136');
+          div.style.opacity = '0.4';
+          div.title = 'Carbon Impact';
+        }
+        
+        div.style.animation = `fragmentGrow 0.6s ease ${i * 0.05}s both`;
+        coin.appendChild(div);
+      });
+      
+      // Center circle with score
+      const center = document.createElement('div');
+      center.style.position = 'absolute';
+      center.style.left = (centerX - 80) + 'px';
+      center.style.top = (centerY - 80) + 'px';
+      center.style.width = '160px';
+      center.style.height = '160px';
+      center.style.borderRadius = '50%';
+      center.style.background = 'radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, rgba(0, 0, 0, 0.8) 100%)';
+      center.style.border = '3px solid rgba(16, 185, 129, 0.5)';
+      center.style.display = 'flex';
+      center.style.flexDirection = 'column';
+      center.style.alignItems = 'center';
+      center.style.justifyContent = 'center';
+      center.style.boxShadow = '0 0 40px rgba(16, 185, 129, 0.4), inset 0 0 30px rgba(255, 255, 255, 0.1)';
+      center.style.backdropFilter = 'blur(10px)';
+      center.innerHTML = `
+        <div style="font-size: 56px; font-weight: 800; color: white; text-shadow: 0 0 20px rgba(16, 185, 129, 0.8);">${score}</div>
+        <div style="font-size: 11px; color: rgba(255,255,255,0.6); letter-spacing: 0.1em; margin-top: 4px;">HEALTH</div>
+      `;
+      coin.appendChild(center);
+      
+      // Add animation
+      if (!document.getElementById('fragment-anim')) {
+        const style = document.createElement('style');
+        style.id = 'fragment-anim';
+        style.textContent = `
+          @keyframes fragmentGrow {
+            from { opacity: 0; transform: scale(0.5) rotate(-10deg); }
+            to { opacity: 1; transform: scale(1) rotate(0deg); }
+          }
+          @keyframes spin {
+            to { transform: rotate(360deg); }
+          }
+        `;
+        document.head.appendChild(style);
+      }
+    }
+
+    // Auth handlers
+    function handleSignup(e) {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const confirm = document.getElementById('confirm').value;
+      const error = document.getElementById('error');
+
+      if (password !== confirm) {
+        error.textContent = 'Passwords do not match';
+        error.classList.add('show');
+        return;
+      }
+
+      if (password.length < 6) {
+        error.textContent = 'Password must be at least 6 characters';
+        error.classList.add('show');
+        return;
+      }
+
+      const newUser = { email, password, name: email.split('@')[0], bank: null };
+      state.users.push(newUser);
+      state.user = newUser;
+      navigate('bank-selection');
+    }
+
+    function handleSignin(e) {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const error = document.getElementById('error');
+
+      const user = state.users.find(u => u.email === email && u.password === password);
+      if (!user) {
+        error.textContent = 'Invalid email or password';
+        error.classList.add('show');
+        return;
+      }
+
+      state.user = user;
+      if (user.bank) {
+        // Load bank-specific data
+        if (state.bankData[user.bank]) {
+          state.data = {
+            ...state.data,
+            ...state.bankData[user.bank],
+            savingsRate: ((state.bankData[user.bank].income - state.bankData[user.bank].spending) / state.bankData[user.bank].income * 100).toFixed(1),
+            carbonFootprint: state.bankData[user.bank].carbon,
+            lastSynced: new Date().toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })
+          };
+        }
+        navigate('dashboard');
+      } else {
+        navigate('bank-selection');
+      }
+    }
+
+    function handleLogout() {
+      state.user = null;
+      navigate('home');
+    }
+
+    // Routing number validation database
+    const validRoutingNumbers = {
+      '121000248': 'Wells Fargo',
+      '021000021': 'Chase',
+      '026009593': 'Bank of America',
+      '031101279': 'Citibank',
+      '084106001': 'Chime',
+      '051403393': 'Capital One',
+      '091000019': 'US Bank',
+      '021112221': 'Ally Bank',
+      '011000015': 'TD Bank',
+      '041000124': 'PNC',
+      '021001088': 'HSBC',
+      '062000019': 'Discover',
+      '121102676': 'Charles Schwab',
+      '026002270': 'Fidelity',
+      '056073573': 'E*TRADE'
+    };
+
+    function handleBankConnect(e) {
+      e.preventDefault();
+      const bankName = document.getElementById('bank-select').value;
+      const accountNumber = document.getElementById('account-number').value;
+      const routingNumber = document.getElementById('routing-number').value;
+      const username = document.getElementById('bank-username').value;
+      const password = document.getElementById('bank-password').value;
+      const errorEl = document.getElementById('bank-validation-error');
+      
+      // VALIDATION: Check all fields are filled
+      if (!bankName || !accountNumber || !routingNumber || !username || !password) {
+        errorEl.textContent = '❌ Please fill in all required fields';
+        errorEl.style.display = 'block';
+        return;
+      }
+      
+      // VALIDATION: Routing number must be exactly 9 digits
+      if (!/^[0-9]{9}$/.test(routingNumber)) {
+        errorEl.textContent = '❌ Routing number must be exactly 9 digits';
+        errorEl.style.display = 'block';
+        return;
+      }
+      
+      // VALIDATION: Account number must be 8-12 digits
+      if (!/^[0-9]{8,12}$/.test(accountNumber)) {
+        errorEl.textContent = '❌ Account number must be 8-12 digits';
+        errorEl.style.display = 'block';
+        return;
+      }
+      
+      // VALIDATION: Username must be at least 3 characters
+      if (username.length < 3) {
+        errorEl.textContent = '❌ Username must be at least 3 characters';
+        errorEl.style.display = 'block';
+        return;
+      }
+      
+      // VALIDATION: Password must be at least 4 characters
+      if (password.length < 4) {
+        errorEl.textContent = '❌ Password must be at least 4 characters';
+        errorEl.style.display = 'block';
+        return;
+      }
+      
+      // VALIDATION: Check routing number against known banks
+      const matchedBank = validRoutingNumbers[routingNumber];
+      if (!matchedBank) {
+        errorEl.textContent = '❌ Invalid routing number. Please check with your bank.';
+        errorEl.style.display = 'block';
+        return;
+      }
+      
+      // VALIDATION: Routing number should match selected bank
+      if (!bankName.includes(matchedBank.split(' ')[0])) {
+        errorEl.textContent = `❌ Routing number ${routingNumber} belongs to ${matchedBank}, not ${bankName}`;
+        errorEl.style.display = 'block';
+        return;
+      }
+      
+      // SUCCESS: All validations passed
+      errorEl.style.display = 'none';
+      
+      if (state.user) {
+        state.user.bank = bankName;
+        
+        // LOAD ACTUAL BANK DATA based on validated credentials
+        // In a real app, this would call the backend API with credentials
+        // Backend would fetch real transactions, calculate income/spending, etc.
+        if (state.bankData[bankName]) {
+          state.data = {
+            ...state.data,
+            balance: state.bankData[bankName].balance,
+            income: state.bankData[bankName].income,
+            spending: state.bankData[bankName].spending,
+            score: state.bankData[bankName].score,
+            savingsRate: ((state.bankData[bankName].income - state.bankData[bankName].spending) / state.bankData[bankName].income * 100).toFixed(1),
+            carbonFootprint: state.bankData[bankName].carbon,
+            lastSynced: new Date().toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })
+          };
+        }
+      }
+      
+      // Show success message briefly
+      errorEl.textContent = '✅ Bank validated successfully! Loading your data...';
+      errorEl.style.display = 'block';
+      errorEl.style.background = 'rgba(16, 185, 129, 0.1)';
+      errorEl.style.color = '#10B981';
+      
+      setTimeout(() => {
+        navigate('dashboard');
+      }, 1500);
+    }
+
+    function showCategoryDetail(category, amount) {
+      alert(`${category}: $${amount}\n\nClick OK to see detailed transactions for this category.\n\n(Full transaction breakdown coming soon)`);
+    }
+
+    // AI Purchase Advisor
+    function analyzePurchase() {
+      const urlInput = document.getElementById('product-url');
+      const resultsDiv = document.getElementById('analysis-results');
+      const loadingDiv = document.getElementById('analysis-loading');
+      
+      if (!urlInput || !resultsDiv || !loadingDiv) return;
+      
+      const url = urlInput.value.trim();
+      if (!url) {
+        alert('Please enter a product URL');
+        return;
+      }
+      
+      // Show loading
+      loadingDiv.style.display = 'block';
+      resultsDiv.innerHTML = '';
+      
+      // Simulate AI analysis
+      setTimeout(() => {
+        loadingDiv.style.display = 'none';
+        
+        // Extract product from URL
+        const products = [
+          { keywords: ['macbook', 'laptop'], name: 'MacBook Pro 16-inch', price: 2499, desc: 'High-performance laptop for professionals' },
+          { keywords: ['iphone-15-pro', 'iphone/15'], name: 'iPhone 15 Pro Max', price: 1199, desc: 'Latest flagship smartphone' },
+          { keywords: ['iphone'], name: 'iPhone 15', price: 799, desc: 'Smartphone with advanced features' },
+          { keywords: ['airpods'], name: 'AirPods Pro', price: 249, desc: 'Premium wireless earbuds' },
+          { keywords: ['ipad'], name: 'iPad Air', price: 599, desc: 'Versatile tablet for work and play' },
+          { keywords: ['watch'], name: 'Apple Watch', price: 399, desc: 'Smartwatch with health tracking' }
+        ];
+        
+        let product = { name: 'Product', price: 500, desc: 'Consumer electronics' };
+        const urlLower = url.toLowerCase();
+        
+        for (const p of products) {
+          if (p.keywords.some(k => urlLower.includes(k))) {
+            product = p;
+            break;
+          }
+        }
+        
+        const balance = state.data.balance;
+        const income = state.data.income;
+        const spending = state.data.spending;
+        const savings = income - spending;
+        
+        let canAfford = balance - product.price >= 2000;
+        let timeline = '';
+        let sacrifices = '';
+        let recommendation = '';
+        let statusColor = '';
+        
+        if (canAfford) {
+          statusColor = '#10B981';
+          timeline = 'Buy Now';
+          recommendation = 'Go ahead! You can afford this purchase and maintain healthy finances.';
+          sacrifices = `
+            <h4 style="color: white; font-size: 18px; margin-bottom: 16px; font-weight: 600;">Optional: Accelerate Recovery</h4>
+            <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 16px; margin-bottom: 12px;">
+              <div style="color: white; font-size: 15px; margin-bottom: 8px; font-weight: 500;">Option 1: Reduce dining by $200/month</div>
+              <div style="color: rgba(255,255,255,0.6); font-size: 14px;">Saves $200/month = Recover in ${Math.ceil(product.price / 200)} months</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 16px; margin-bottom: 12px;">
+              <div style="color: white; font-size: 15px; margin-bottom: 8px; font-weight: 500;">Option 2: Cut subscriptions by $50/month</div>
+              <div style="color: rgba(255,255,255,0.6); font-size: 14px;">Cancel unused services = Extra $50/month</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 16px;">
+              <div style="color: white; font-size: 15px; margin-bottom: 8px; font-weight: 500;">Option 3: Reduce shopping by $300/month</div>
+              <div style="color: rgba(255,255,255,0.6); font-size: 14px;">Delay non-essential purchases = Save faster</div>
+            </div>
+          `;
+        } else {
+          const monthsNeeded = Math.ceil((product.price - (balance - 2000)) / savings);
+          if (monthsNeeded <= 6) {
+            statusColor = '#FBBF24';
+            timeline = `Save for ${monthsNeeded} month${monthsNeeded > 1 ? 's' : ''}`;
+            recommendation = `You should save up first. With your current savings rate, you can afford this in ${monthsNeeded} months.`;
+          } else {
+            statusColor = '#EF4444';
+            timeline = 'Not recommended now';
+            recommendation = 'This purchase would significantly impact your financial health. Focus on building your emergency fund first.';
+          }
+          
+          const monthlySavingsNeeded = Math.ceil(product.price / monthsNeeded);
+          sacrifices = `
+            <h4 style="color: white; font-size: 18px; margin-bottom: 16px; font-weight: 600;">What You Need to Cut Down</h4>
+            <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 16px; margin-bottom: 12px;">
+              <div style="color: white; font-size: 15px; margin-bottom: 8px; font-weight: 500;">Option 1: Reduce dining by $${Math.min(200, monthlySavingsNeeded)}/month</div>
+              <div style="color: rgba(255,255,255,0.6); font-size: 14px;">Currently spending $380/month on dining out</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 16px; margin-bottom: 12px;">
+              <div style="color: white; font-size: 15px; margin-bottom: 8px; font-weight: 500;">Option 2: Cut subscriptions by $${Math.min(67, monthlySavingsNeeded)}/month</div>
+              <div style="color: rgba(255,255,255,0.6); font-size: 14px;">Cancel HBO Max ($16) + Disney+ ($14) + Others</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 16px; margin-bottom: 12px;">
+              <div style="color: white; font-size: 15px; margin-bottom: 8px; font-weight: 500;">Option 3: Reduce shopping by $${Math.min(300, monthlySavingsNeeded)}/month</div>
+              <div style="color: rgba(255,255,255,0.6); font-size: 14px;">Currently spending $450/month on shopping</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 16px;">
+              <div style="color: white; font-size: 15px; margin-bottom: 8px; font-weight: 500;">Option 4: Increase income by $${monthlySavingsNeeded}/month</div>
+              <div style="color: rgba(255,255,255,0.6); font-size: 14px;">Side gig, freelance work, or negotiate raise</div>
+            </div>
+          `;
+        }
+        
+        resultsDiv.innerHTML = `
+          <div style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 32px;">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 24px;">
+              <div>
+                <h3 style="color: white; font-size: 28px; margin-bottom: 8px; font-weight: 600;">${product.name}</h3>
+                <p style="color: rgba(255,255,255,0.6); font-size: 15px; margin-bottom: 4px;">${product.desc}</p>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 36px; font-weight: 700; color: white;">$${product.price}</div>
+              </div>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+              <h4 style="color: rgba(255,255,255,0.8); font-size: 14px; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Your Financial Status</h4>
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                <div>
+                  <div style="color: rgba(255,255,255,0.5); font-size: 13px; margin-bottom: 4px;">Balance</div>
+                  <div style="color: white; font-size: 24px; font-weight: 600;">$${balance.toFixed(0)}</div>
+                </div>
+                <div>
+                  <div style="color: rgba(255,255,255,0.5); font-size: 13px; margin-bottom: 4px;">Monthly Income</div>
+                  <div style="color: white; font-size: 24px; font-weight: 600;">$${income}</div>
+                </div>
+                <div>
+                  <div style="color: rgba(255,255,255,0.5); font-size: 13px; margin-bottom: 4px;">Monthly Savings</div>
+                  <div style="color: white; font-size: 24px; font-weight: 600;">$${savings}</div>
+                </div>
+              </div>
+            </div>
+            
+            <div style="background: rgba(${statusColor === '#10B981' ? '16, 185, 129' : statusColor === '#FBBF24' ? '251, 191, 36' : '239, 68, 68'}, 0.15); border: 2px solid ${statusColor}; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+              <h4 style="color: ${statusColor}; font-size: 20px; margin-bottom: 12px; font-weight: 700;">Can You Afford It?</h4>
+              <p style="color: white; font-size: 32px; font-weight: 700; margin-bottom: 8px;">${canAfford ? 'Yes!' : 'Not Yet'}</p>
+              <p style="color: rgba(255,255,255,0.8); font-size: 15px; line-height: 1.6;">${recommendation}</p>
+            </div>
+            
+            <div style="margin-bottom: 24px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h4 style="color: white; font-size: 18px; margin: 0; font-weight: 600;">Timeline</h4>
+                <div style="color: ${statusColor}; font-size: 24px; font-weight: 700;">${timeline}</div>
+              </div>
+              ${canAfford ? `<p style="color: rgba(255,255,255,0.7); font-size: 14px;">Your balance after purchase: $${(balance - product.price).toFixed(2)}</p>` : ''}
+            </div>
+            
+            <div>
+              ${sacrifices}
+            </div>
+            
+            <div style="background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 12px; padding: 20px; margin-top: 24px;">
+              <h4 style="color: #06B6D4; font-size: 16px; margin-bottom: 12px; font-weight: 600;">Action Plan</h4>
+              <ol style="margin: 0; padding-left: 20px; color: rgba(255,255,255,0.8); font-size: 14px; line-height: 1.8;">
+                <li>Set purchase goal: "${product.name}"</li>
+                <li>Target date: ${canAfford ? 'Now' : `${new Date(Date.now() + monthsNeeded * 30 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`}</li>
+                <li>${canAfford ? 'Maintain emergency fund' : 'Track savings progress monthly'}</li>
+                <li>${canAfford ? 'Consider waiting 1 month for extra buffer' : 'Review and adjust spending as needed'}</li>
+              </ol>
+            </div>
+          </div>
+        `;
+      }, 1500);
+    }
+
+    // Start app
+    console.log('Initializing app...');
+    render();
+    console.log('App initialized successfully');
+  </script>
+</body>
+</html>
